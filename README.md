@@ -22,13 +22,20 @@ be warned!
 # Configuration
 
 Starting Prommer is easy.
+All flags are optional.
 
 ```
 $ prommer [-target-file <target-file>] [-monitoring-label <label-name>]
 ```
 
+The `-target-file` flag is the location where the JSON file will be written.
+The default value is `/etc/prometheus/target-groups.json`.
+
+The `-monitoring-label` flag is the label that will be used to filter containers.
+The default value is `prometheus-target`.
+
 Prometheus must be configured to use the target groups JSON file.
-You must set the `file_sd_configs` field for the Prometheus scrape job to use the target groups
+You must set the `file_sd_configs` field for the Prometheus scrape job to use the target groups. Example:
 
 ```yaml
 scrape_configs:
@@ -45,7 +52,13 @@ this container must run with the `--privileged` flag.
 
 # TODO
 
+- [ ] Figure out ~~what the best way is~~ which solution is tolerable enough to define the port and metrics endpoint per container without crying.
+- [ ] Write tests
+- [ ] Set up CI with Travis
+- [ ] Create and publish minimal Docker image that includes Prommer.
 - [ ] Create and publish minimal Docker image that includes Prometheus and Prommer.
 - [ ] Make it work for Docker Swarm so it might actually be useful.
 - [ ] Optimize target update mechanism by doing incremental changes using the Docker events stream, instead of requesting all the labeled containers on each change.
-- [ ] Become a Go ninja (unlikely) and probably rewrite this whole thing
+- [ ] Become a Go ninja (unlikely) and probably rewrite this whole thing.
+- [ ] Think of other possibilities to do Prometheus target discovery.
+- [ ] Make Prommer an industry standard for Prometheus monitoring and take over the world.
