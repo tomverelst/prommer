@@ -48,7 +48,8 @@ scrape_configs:
 Prommer must be able to listen to the Docker events stream.
 Therefor it is required to access the Docker daemon.
 If you use Prommer inside a container (which you should),
-this container must run with the `--privileged` flag.
+the container must be mounted with `-v /var/run/docker.sock:/var/run/docker.sock:ro`.
+Note that this has certain security risks you must be aware of.
 
 # TODO
 
