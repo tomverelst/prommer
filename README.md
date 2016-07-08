@@ -14,7 +14,7 @@ Definitely do not use this in production.**
 Why did I create this then, you ask?
 I wanted a very simple solution for service discovery for Prometheus demo purposes on a single host.
 I did not want to distract users with other complex service discovery setups like etcd and service registration agents.
-I also wanted to use this learn Go,
+I also wanted to use this to learn Go,
 so this is my first Go application.
 Should you dare to look inside the source code,
 be warned!
