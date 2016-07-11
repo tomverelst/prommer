@@ -6,12 +6,13 @@ type Service struct {
 	Instances []*Instance
 }
 
-// Instances of a Service
+// Instance of a Service
 type Instance struct {
 	HostIP   string
 	HostPort string
 }
 
+// Monitor interface
 type Monitor interface {
 	Monitor(services []*Service)
 }

@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/context"
 )
 
+// ServiceProvider provides the services to be monitored
 type ServiceProvider struct {
 	docker          *client.Client
 	monitoringLabel string
@@ -88,14 +89,21 @@ func (sp *ServiceProvider) GetServices() ([]*Service, error) {
 }
 
 func (sp *ServiceProvider) convert(c types.Container) *Instance {
-	port := &c.Ports[0]
 
-	if port == nil || port.PublicPort == 0 {
+	portLabel := sp.monitoringLabel + ".port"
+
+	findPortOptions := &FindPortOptions{
+		Label: &portLabel,
+	}
+
+	port := FindPort(c, findPortOptions)
+
+	if port == 0 {
 		return nil
 	}
 
 	return &Instance{
 		HostIP:   c.NetworkSettings.Networks["bridge"].IPAddress,
-		HostPort: strconv.Itoa(port.PublicPort),
+		HostPort: strconv.Itoa(port),
 	}
 }

@@ -3,6 +3,8 @@ package prommer
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -28,10 +30,12 @@ func NewPrometheusMonitor(targetFilePath string) (*PrometheusMonitor, error) {
 	return monitor, nil
 }
 
+// PrometheusMonitor
 type PrometheusMonitor struct {
 	targetFilePath string
 }
 
+// TargetGroup
 type TargetGroup struct {
 	Targets []string          `json:"targets,omitempty"`
 	Labels  map[string]string `json:"labels,omitempty"`
@@ -54,6 +58,10 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 		})
 	}
 
+	if targetGroups == nil {
+		targetGroups = make([]*TargetGroup, 0)
+	}
+
 	content, err := json.Marshal(targetGroups)
 
 	if err != nil {
@@ -74,13 +82,13 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 		}
 	}()
 
+	fmt.Println(string(content[:]))
+
 	if _, writeError := f.Write(content); err != nil {
 		log.Errorln(writeError)
 	}
 
-	err = f.Sync()
-
-	if err != nil {
+	if err := ioutil.WriteFile(f.Name(), content, 0644); err != nil {
 		log.Errorln(err)
 	}
 

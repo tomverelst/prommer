@@ -25,7 +25,7 @@ Starting Prommer is easy.
 All flags are optional.
 
 ```
-$ prommer [-target-file <target-file>] [-monitoring-label <label-name>]
+$ prommer [-target-file=<target-file>] [-monitoring-label=<label-name>]
 ```
 
 The `-target-file` flag is the location where the JSON file will be written.
