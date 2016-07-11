@@ -35,8 +35,7 @@ type PrometheusMonitor struct {
 	targetFilePath string
 }
 
-// TargetGroup
-type TargetGroup struct {
+type targetGroup struct {
 	Targets []string          `json:"targets,omitempty"`
 	Labels  map[string]string `json:"labels,omitempty"`
 }
@@ -44,27 +43,7 @@ type TargetGroup struct {
 // Monitor the given services.
 // The target group configuration is updated and overrides the old configuration
 func (m *PrometheusMonitor) Monitor(services []*Service) {
-
-	var targetGroups []*TargetGroup
-	// Write files for current services.
-	for _, service := range services {
-		var targets []string
-		for _, instance := range service.Instances {
-			targets = append(targets, instance.HostIP+":"+instance.HostPort)
-		}
-
-		labels := make(map[string]string)
-		labels["job"] = service.Name
-
-		targetGroups = append(targetGroups, &TargetGroup{
-			Targets: targets,
-			Labels:  labels,
-		})
-	}
-
-	if targetGroups == nil {
-		targetGroups = make([]*TargetGroup, 0)
-	}
+	targetGroups := m.createTargetGroups(services)
 
 	content, err := json.Marshal(targetGroups)
 
@@ -73,7 +52,9 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 		return
 	}
 
-	f, err := m.getTargetFile()
+	tempFile := m.targetFilePath + ".tmp"
+
+	f, err := m.openFile(tempFile)
 
 	if err != nil {
 		log.Errorln(err)
@@ -92,27 +73,58 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 		log.Errorln(writeError)
 	}
 
-	if err := ioutil.WriteFile(f.Name(), content, 0644); err != nil {
+	if err := ioutil.WriteFile(tempFile, content, 0644); err != nil {
+		log.Errorln(err)
+	}
+
+	err = os.Rename(tempFile, m.targetFilePath)
+	if err != nil {
 		log.Errorln(err)
 	}
 
 }
 
-func (m *PrometheusMonitor) getTargetFile() (*os.File, error) {
+func (m *PrometheusMonitor) createTargetGroups(services []*Service) []*targetGroup {
+	var groups []*targetGroup
+	// Write files for current services.
+	for _, service := range services {
+		var targets []string
+		for _, instance := range service.Instances {
+			targets = append(targets, instance.HostIP+":"+instance.HostPort)
+		}
+
+		if len(targets) > 0 {
+			labels := make(map[string]string)
+			labels["job"] = service.Name
+
+			groups = append(groups, &targetGroup{
+				Targets: targets,
+				Labels:  labels,
+			})
+		}
+	}
+
+	if groups == nil {
+		groups = make([]*targetGroup, 0)
+	}
+	return groups
+}
+
+func (m *PrometheusMonitor) openFile(path string) (*os.File, error) {
 	var (
 		file *os.File
 	)
 
-	var _, err = os.Stat(m.targetFilePath)
+	var _, err = os.Stat(path)
 
 	if os.IsNotExist(err) {
-		_, createError := os.Create(m.targetFilePath)
+		_, createError := os.Create(path)
 		if createError != nil {
 			return nil, createError
 		}
 	}
 
-	file, err = os.OpenFile(m.targetFilePath, os.O_WRONLY, 0644)
+	file, err = os.OpenFile(path, os.O_WRONLY, 0644)
 
 	if err != nil {
 		return nil, err
