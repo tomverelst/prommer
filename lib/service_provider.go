@@ -52,10 +52,6 @@ func (sp *ServiceProvider) GetServices() ([]*Service, error) {
 	serviceMap := make(map[string]*Service)
 
 	for _, c := range list {
-		n := len(c.Ports)
-		if n == 0 {
-			return nil, errors.New("No port")
-		}
 		var (
 			serviceName = c.Labels[sp.monitoringLabel]
 			service     *Service

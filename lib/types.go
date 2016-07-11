@@ -1,5 +1,10 @@
 package prommer
 
+type PrommerOptions struct {
+	TargetFilePath  string
+	MonitoringLabel string
+}
+
 // Service to be monitored
 type Service struct {
 	Name      string
