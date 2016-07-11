@@ -1,7 +1,14 @@
 package main
 
-import "flag"
-import "github.com/tomverelst/prommer/lib"
+import (
+	"flag"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/tomverelst/prommer/lib"
+)
 
 var (
 	monitoringLabel = flag.String("monitoring-label", "prometheus-target", "Containers with this label will be added as target")
@@ -11,14 +18,17 @@ var (
 func main() {
 	flag.Parse()
 
-	options := &prommer.PrommerOptions{
+	p := prommer.CreatePrommer(&prommer.PrommerOptions{
 		MonitoringLabel: *monitoringLabel,
 		TargetFilePath:  *targetFile,
-	}
+	})
 
-	p := &prommer.Prommer{
-		Options: options,
-	}
+	go p.Start()
 
-	p.Start()
+	// Handle SIGINT and SIGTERM.
+	ch := make(chan os.Signal)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	log.Println(<-ch)
+
+	p.Stop()
 }

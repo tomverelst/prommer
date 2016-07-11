@@ -53,8 +53,12 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 			targets = append(targets, instance.HostIP+":"+instance.HostPort)
 		}
 
+		labels := make(map[string]string)
+		labels["job"] = service.Name
+
 		targetGroups = append(targetGroups, &TargetGroup{
 			Targets: targets,
+			Labels:  labels,
 		})
 	}
 
