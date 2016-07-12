@@ -69,10 +69,6 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 
 	fmt.Println(string(content[:]))
 
-	if _, writeError := f.Write(content); err != nil {
-		log.Errorln(writeError)
-	}
-
 	if err := ioutil.WriteFile(tempFile, content, 0644); err != nil {
 		log.Errorln(err)
 	}
