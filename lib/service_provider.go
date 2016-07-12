@@ -67,7 +67,7 @@ func (sp *ServiceProvider) GetServices() ([]*Service, error) {
 			serviceMap[serviceName] = service
 		}
 
-		s := sp.convert(c)
+		s := sp.convert(c, FindPortFromContainer)
 
 		if s != nil {
 			service.Instances = append(service.Instances, s)
@@ -84,7 +84,7 @@ func (sp *ServiceProvider) GetServices() ([]*Service, error) {
 	return services, nil
 }
 
-func (sp *ServiceProvider) convert(c types.Container) *Instance {
+func (sp *ServiceProvider) convert(c types.Container, findPort FindPort) *Instance {
 
 	portLabel := sp.monitoringLabel + ".port"
 
@@ -92,7 +92,7 @@ func (sp *ServiceProvider) convert(c types.Container) *Instance {
 		Label: &portLabel,
 	}
 
-	port := FindPort(c, findPortOptions)
+	port := findPort(c, findPortOptions)
 
 	if port == 0 {
 		return nil

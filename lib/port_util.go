@@ -11,19 +11,26 @@ type FindPortOptions struct {
 	Label *string
 }
 
-// FindPort attempts to find the correct metrics port
-func FindPort(c dockertypes.Container, options *FindPortOptions) int {
+// FindPort finds a port for a container
+type FindPort func(dockertypes.Container, *FindPortOptions) int
 
-	portFromLabels := findPortFromLabels(c, options)
+// FindPortFromContainer attempts to find the correct port from the container
+func FindPortFromContainer(c dockertypes.Container, options *FindPortOptions) int {
+	var (
+		portFromLabels int
+		publicPorts    []dockertypes.Port
+		amountOfPorts  int
+		port           *dockertypes.Port
+	)
+
+	portFromLabels = findPortFromLabels(c, options)
 
 	if portFromLabels != 0 {
 		return portFromLabels
 	}
 
-	publicPorts := onlyPublicPorts(c.Ports)
-	amountOfPorts := len(publicPorts)
-
-	var port *dockertypes.Port
+	publicPorts = onlyPublicPorts(c.Ports)
+	amountOfPorts = len(publicPorts)
 
 	if amountOfPorts == 0 {
 		return 0
