@@ -1,4 +1,4 @@
-# Prommer ![Travis Build](https://travis-ci.org/tomverelst/prommer.svg)
+# Prommer [![Build Status](https://travis-ci.org/tomverelst/prommer.svg?branch=master)](https://travis-ci.org/tomverelst/prommer)
 
 **A silly contraction between Prometheus and Docker**
 
