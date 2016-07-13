@@ -1,3 +1,10 @@
+# General
 .DS_Store
 .gopath
+
+# Files
 prommer
+test.json
+
+# Folders
+build/
