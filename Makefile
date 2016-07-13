@@ -5,11 +5,11 @@ prepare:
 	go get -d -v
 
 .PHONY: build
-build:
+build: prepare
 	go build -o prommer
 
 .PHONY: run
-run: prepare build
+run: build
 	./prommer -target-file=./test.json
 
 .PHONY: lint

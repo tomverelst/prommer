@@ -6,5 +6,5 @@ go:
     - 1.6
     - tip
 
-script:
-  make travis-test    
+before_script: make build
+script: make travis-test
