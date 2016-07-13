@@ -1,4 +1,4 @@
-# Prommer
+# Prommer ![Travis Build](https://travis-ci.org/tomverelst/prommer.svg)
 
 **A silly contraction between Prometheus and Docker**
 
