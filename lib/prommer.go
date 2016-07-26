@@ -16,13 +16,13 @@ type Prommer struct {
 // CreatePrommer creates a new instance of Prommer
 func CreatePrommer(options *PrommerOptions) *Prommer {
 	defaultHeaders := map[string]string{"User-Agent": "engine-api-cli-1.0"}
-	cli, err := client.NewClient("unix:///var/run/docker.sock", "v1.22", nil, defaultHeaders)
+	docker, err := client.NewClient("unix:///var/run/docker.sock", "v1.22", nil, defaultHeaders)
 
 	if err != nil {
 		panic(err)
 	}
 
-	serviceProvider, err := CreateServiceProvider(cli, options.MonitoringLabel)
+	serviceProvider, err := CreateServiceProvider(docker, options.MonitoringLabel)
 	if err != nil {
 		panic(err)
 	}
