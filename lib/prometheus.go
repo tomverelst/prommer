@@ -54,19 +54,6 @@ func (m *PrometheusMonitor) Monitor(services []*Service) {
 
 	tempFile := m.targetFilePath + ".tmp"
 
-	f, err := m.openFile(tempFile)
-
-	if err != nil {
-		log.Errorln(err)
-		return
-	}
-
-	defer func() {
-		if err := f.Close(); err != nil {
-			log.Errorln(err)
-		}
-	}()
-
 	fmt.Println(string(content[:]))
 
 	if err := ioutil.WriteFile(tempFile, content, 0644); err != nil {
@@ -104,27 +91,4 @@ func (m *PrometheusMonitor) createTargetGroups(services []*Service) []*targetGro
 		groups = make([]*targetGroup, 0)
 	}
 	return groups
-}
-
-func (m *PrometheusMonitor) openFile(path string) (*os.File, error) {
-	var (
-		file *os.File
-	)
-
-	var _, err = os.Stat(path)
-
-	if os.IsNotExist(err) {
-		_, createError := os.Create(path)
-		if createError != nil {
-			return nil, createError
-		}
-	}
-
-	file, err = os.OpenFile(path, os.O_WRONLY, 0644)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return file, nil
 }
