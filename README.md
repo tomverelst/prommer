@@ -55,9 +55,8 @@ Note that this has certain security risks you must be aware of.
 
 - [ ] Figure out ~~what the best way is~~ which solution is tolerable enough to define the port and metrics endpoint per container without crying.
 - [ ] Write tests
-- [ ] Set up CI with Travis
-- [ ] Create and publish minimal Docker image that includes Prommer.
-- [ ] Create and publish minimal Docker image that includes Prometheus and Prommer.
+- [x] Set up CI with Travis
+- [x] Create and publish minimal Docker image that includes Prommer.
 - [ ] Make it work for Docker Swarm so it might actually be useful.
 - [ ] Optimize target update mechanism by doing incremental changes using the Docker events stream, instead of requesting all the labeled containers on each change.
 - [ ] Become a Go ninja (unlikely) and probably rewrite this whole thing.
