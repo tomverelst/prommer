@@ -1,3 +1,6 @@
+IMAGE = tomverelst/prommer
+VERSION = 0.0.3-alpha
+
 default: run
 
 .PHONY: prepare
@@ -19,10 +22,36 @@ lint:
 	  else echo "All .go files formatted correctly"; fi
 	go tool vet -composites=false **/*.go
 
+.PHONY: test
+test: lint
+	go test -v
+
 .PHONY: travis-test
 travis-test: lint
 	go test -v
 
 .PHONY: binary
-binary: prepare
-	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o prommer main.go
+binary: prepare test
+	@echo "Compiling binary"
+	@CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o prommer main.go
+
+.PHONY: docker
+docker: binary
+	@echo "Building Docker image"
+	@docker build -t $(IMAGE):$(VERSION) .
+
+.PHONY: run-docker
+run-docker:
+	@if ! docker images $(IMAGE) | awk '{print $$2}' | grep -q -F $(VERSION); then echo "$(IMAGE):$(VERSION) is not yet built. Please run 'make docker'"; false; fi
+	docker run -P -v /var/run/docker.sock:/var/run/docker.sock $(IMAGE):$(VERSION)
+
+.PHONY: tag-latest
+tag-latest:
+	@if ! docker images $(IMAGE) | awk '{print $$2}' | grep -q -F $(VERSION); then echo "$(IMAGE):$(VERSION) is not yet built. Please run 'make docker'"; false; fi
+	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
+
+.PHONY: release
+release: test tag-latest
+	@if ! docker images $(IMAGE) | awk '{print $$2}' | grep -q -F $(VERSION); then echo "$(IMAGE):$(VERSION) is not yet built. Please run 'make docker'"; false; fi
+	@echo "Pushing Docker image"
+	@docker push $(IMAGE)
