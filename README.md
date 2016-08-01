@@ -51,6 +51,10 @@ If you use Prommer inside a container (which you should),
 the container must be mounted with `-v /var/run/docker.sock:/var/run/docker.sock:ro`.
 Note that this has certain security risks you must be aware of.
 
+```bash
+$ docker run -v /var/run/docker.sock:/var/run/docker.sock:ro tomverelst/prommer
+```
+
 # TODO
 
 - [ ] Figure out ~~what the best way is~~ which solution is tolerable enough to define the port and metrics endpoint per container without crying.
@@ -61,4 +65,5 @@ Note that this has certain security risks you must be aware of.
 - [ ] Optimize target update mechanism by doing incremental changes using the Docker events stream, instead of requesting all the labeled containers on each change.
 - [ ] Become a Go ninja (unlikely) and probably rewrite this whole thing.
 - [ ] Think of other possibilities to do Prometheus target discovery.
+- [ ] Provide possibility to use a configuration file
 - [ ] Make Prommer an industry standard for Prometheus monitoring and take over the world.
