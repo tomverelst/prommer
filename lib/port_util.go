@@ -18,9 +18,9 @@ type FindPort func(dockertypes.Container, *FindPortOptions) int
 func FindPortFromContainer(c dockertypes.Container, options *FindPortOptions) int {
 	var (
 		portFromLabels int
-		publicPorts    []dockertypes.Port
-		amountOfPorts  int
-		port           *dockertypes.Port
+		//publicPorts    []dockertypes.Port
+		amountOfPorts int
+		port          *dockertypes.Port
 	)
 
 	portFromLabels = findPortFromLabels(c, options)
@@ -29,30 +29,30 @@ func FindPortFromContainer(c dockertypes.Container, options *FindPortOptions) in
 		return portFromLabels
 	}
 
-	publicPorts = onlyPublicPorts(c.Ports)
-	amountOfPorts = len(publicPorts)
+	//publicPorts = onlyPublicPorts(c.Ports)
+	amountOfPorts = len(c.Ports)
 
 	if amountOfPorts == 0 {
 		return 0
 	}
 
 	if amountOfPorts == 1 {
-		return publicPorts[0].PublicPort
+		return c.Ports[0].PrivatePort
 	}
 
 	// If there are multiple ports
 	// prefer the one that forwards to port 80
-	port = findPortEighty(publicPorts)
+	port = findPortEighty(c.Ports)
 
 	if port == nil {
-		port = &publicPorts[0]
+		port = &c.Ports[0]
 	}
 
 	if port == nil {
 		return 0
 	}
 
-	return port.PublicPort
+	return port.PrivatePort
 }
 
 func findPortFromLabels(c dockertypes.Container, options *FindPortOptions) int {
