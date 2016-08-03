@@ -42,7 +42,7 @@ scrape_configs:
   - job_name: 'prommer-job'
     scrape_interval: 5s
     file_sd_configs:
-    - names: ['tgroups/*.json']
+    - names: ['/etc/prometheus/target-groups/*.json']
 ```
 
 Prommer must be able to listen to the Docker events stream.
