@@ -99,7 +99,7 @@ func (sp *ServiceProvider) convert(c types.Container, findPort FindPort) *Instan
 	}
 
 	return &Instance{
-		HostIP:   c.NetworkSettings.Networks["bridge"].IPAddress,
+		HostIP:   c.NetworkSettings.Networks[c.HostConfig.NetworkMode].IPAddress,
 		HostPort: strconv.Itoa(port),
 	}
 }
