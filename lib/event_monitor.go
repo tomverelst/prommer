@@ -4,11 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"sort"
-	"strings"
-	"time"
 
-	"github.com/docker/docker/pkg/jsonlog"
 	"github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
 	eventtypes "github.com/docker/engine-api/types/events"
@@ -84,28 +80,5 @@ func printOutput(event eventtypes.Message, output io.Writer) {
 		fmt.Println("Type: " + event.Type)
 		fmt.Println("Action: " + event.Action)
 	}
-
-	if event.TimeNano != 0 {
-		fmt.Fprintf(output, "%s ", time.Unix(0, event.TimeNano).Format(jsonlog.RFC3339NanoFixed))
-	} else if event.Time != 0 {
-		fmt.Fprintf(output, "%s ", time.Unix(event.Time, 0).Format(jsonlog.RFC3339NanoFixed))
-	}
-
-	fmt.Fprintf(output, "%s %s %s", event.Type, event.Action, event.Actor.ID)
-
-	if len(event.Actor.Attributes) > 0 {
-		var attrs []string
-		var keys []string
-		for k := range event.Actor.Attributes {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			v := event.Actor.Attributes[k]
-			attrs = append(attrs, fmt.Sprintf("%s=%s", k, v))
-		}
-		fmt.Fprintf(output, " (%s)", strings.Join(attrs, ", "))
-	}
-	fmt.Fprint(output, "\n")
 
 }
