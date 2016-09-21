@@ -3,7 +3,7 @@ package prommer
 import (
 	"strconv"
 
-	dockertypes "github.com/docker/engine-api/types"
+	dockertypes "github.com/docker/docker/api/types"
 )
 
 // FindPortOptions holds the optional parameters for FindPort

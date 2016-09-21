@@ -1,0 +1,55 @@
+package: github.com/tomverelst/prommer
+import:
+- package: github.com/Microsoft/go-winio
+  version: ce2922f643c8fd76b46cadc7f404a06282678b34
+- package: github.com/Sirupsen/logrus
+  version: a283a10442df8dc09befd873fab202bf8a253d6a
+- package: github.com/docker/distribution
+  version: bfa0a9c0973b5026d2e942dec29115c120e7f731
+  subpackages:
+  - digest
+  - reference
+- package: github.com/docker/engine-api
+  version: 16c66e864c3c2f2dc8c35276232aafe9828c88bc
+  subpackages:
+  - client
+  - client/transport
+  - client/transport/cancellable
+  - types
+  - types/blkiodev
+  - types/container
+  - types/events
+  - types/filters
+  - types/network
+  - types/reference
+  - types/registry
+  - types/strslice
+  - types/swarm
+  - types/time
+  - types/versions
+- package: github.com/docker/go-connections
+  version: 990a1a1a70b0da4c4cb70e117971a4f0babfbf1a
+  subpackages:
+  - nat
+  - sockets
+  - tlsconfig
+- package: github.com/docker/go-units
+  version: eb879ae3e2b84e2a142af415b679ddeda47ec71c
+- package: github.com/opencontainers/runc
+  version: 142df3836b740af53dc6da59eed8dbc92f62917c
+  subpackages:
+  - libcontainer/user
+- package: github.com/prometheus/common
+  version: ebdfc6da46522d58825777cf1f90490a5b1ef1d8
+  subpackages:
+  - log
+- package: golang.org/x/net
+  version: 7c62cfdcccc65f87b0120ec841012ba816fc1aec
+  subpackages:
+  - context
+  - proxy
+- package: golang.org/x/sys
+  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  subpackages:
+  - unix
+  - windows

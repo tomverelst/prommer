@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/docker/engine-api/client"
-	"github.com/docker/engine-api/types"
-	eventtypes "github.com/docker/engine-api/types/events"
-	"github.com/docker/engine-api/types/filters"
+	"github.com/docker/docker/api/types"
+	eventtypes "github.com/docker/docker/api/types/events"
+	"github.com/docker/docker/api/types/filters"
+	"github.com/docker/docker/client"
 	"golang.org/x/net/context"
 )
 
