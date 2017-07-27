@@ -1,5 +1,7 @@
 # Prommer [![Build Status](https://travis-ci.org/tomverelst/prommer.svg?branch=master)](https://travis-ci.org/tomverelst/prommer)
 
+Prommer is an application for demo purposes for my [Monitoring with Prometheus](https://ordina-jworks.github.io/monitoring/2016/09/23/Monitoring-with-Prometheus.html) blog post.
+
 **A silly contraction between Prometheus and Docker**
 
 Prommer is a simple target discovery service for Prometheus using Docker.
@@ -12,7 +14,7 @@ This JSON file can be used for Prometheus' scrape configuration for dynamic targ
 Definitely do not use this in production.**
 
 Why did I create this then, you ask?
-I wanted a very simple solution for service discovery for Prometheus demo purposes on a single host.
+I wanted a very simple solution for service discovery for a Prometheus demo purposes on a single host.
 I did not want to distract users with other complex service discovery setups like etcd and service registration agents.
 I also wanted to use this to learn Go,
 so this is my first Go application.
